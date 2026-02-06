@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Stock Audit</title>
+</head>
+<body>
+<h2>📝 Stock Audit Log</h2>
+
+<table border="1">
+  <tr>
+    <th>MedicineId</th>
+    <th>Batch</th>
+    <th>Old</th>
+    <th>New</th>
+    <th>Action</th>
+    <th>User</th>
+  </tr>
+  <tr th:each="l : ${logs}">
+    <td th:text="${l.medicineId}"></td>
+    <td th:text="${l.batchNo}"></td>
+    <td th:text="${l.oldQty}"></td>
+    <td th:text="${l.newQty}"></td>
+    <td th:text="${l.action}"></td>
+    <td th:text="${l.changedBy}"></td>
+  </tr>
+</table>
+
+</body>
+</html>

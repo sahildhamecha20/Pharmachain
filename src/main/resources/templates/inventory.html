@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Inventory</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background: #f2f2f2; }
+    .pager a { margin: 0 8px; }
+  </style>
+</head>
+<body>
+
+<h2>📦 Inventory</h2>
+
+<table>
+  <tr>
+    <th>Medicine</th>
+    <th>Batch</th>
+    <th>Expiry</th>
+    <th>Qty</th>
+    <th>Status</th>
+  </tr>
+  <tr th:each="b : ${batches.content}">
+    <td th:text="${b.medicine.name}"></td>
+    <td th:text="${b.batchNo}"></td>
+    <td th:text="${b.expiryDate}"></td>
+    <td th:text="${b.quantity}"></td>
+    <td th:text="${b.active ? 'ACTIVE' : 'INACTIVE'}"></td>
+  </tr>
+</table>
+
+<div class="pager">
+  <a th:if="${batches.hasPrevious()}"
+     th:href="@{/inventory(page=${batches.number-1})}">⬅ Prev</a>
+
+  <span>Page <b th:text="${batches.number+1}"></b></span>
+
+  <a th:if="${batches.hasNext()}"
+     th:href="@{/inventory(page=${batches.number+1})}">Next ➡</a>
+</div>
+
+</body>
+</html>

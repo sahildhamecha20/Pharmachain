@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Order</title>
+</head>
+<body>
+
+<h2>Create Order</h2>
+
+<label>Batch ID:</label>
+<input type="number" id="batchId"><br><br>
+
+<label>Quantity:</label>
+<input type="number" id="quantity"><br><br>
+
+<button onclick="createOrder()">Place Order</button>
+
+<p id="result"></p>
+
+<script>
+    function createOrder() {
+
+        const batchId = document.getElementById("batchId").value;
+        const quantity = document.getElementById("quantity").value;
+
+        fetch('/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                batchId: batchId,
+                quantity: quantity
+            })
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Order failed");
+            }
+            return res.json();
+        })
+        .then(data => {
+            document.getElementById("result").innerHTML =
+                "Order Placed ✔️<br>" +
+                "Order No: " + data.orderNumber + "<br>" +
+                "Quantity: " + data.quantity;
+        })
+        .catch(err => {
+            document.getElementById("result").innerText = err.message;
+        });
+    }
+</script>
+
+</body>
+</html>

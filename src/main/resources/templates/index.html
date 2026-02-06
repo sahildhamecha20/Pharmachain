@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PharmaChain - Secure Pharma Partner</title>
+  <style>
+    /* 1. Splash Screen Styling */
+    #splash-screen {
+        position: fixed; width: 100%; height: 100vh; background: #ffffff;
+        display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
+    }
+    /* Image size and animation */
+    .splash-logo { width: 300px; height: auto; animation: pulse 2s infinite ease-in-out; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+    /* 2. Main Dashboard Styling */
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; display: none; }
+    .navbar { background: #2c3e50; color: white; padding: 15px 30px; display: flex; align-items: center; gap: 15px; }
+    .navbar img { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; }
+
+    .container { padding: 30px; max-width: 1200px; margin: auto; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; cursor: pointer; transition: 0.3s; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+
+    .section-box { background: white; padding: 25px; border-radius: 12px; margin-top: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    input { padding: 10px; margin: 5px; border: 1px solid #ddd; border-radius: 5px; width: 180px; }
+    button { padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    button:hover { background: #219150; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+    th, td { padding: 12px; border: 1px solid #eee; text-align: left; }
+    th { background: #34495e; color: white; }
+    tr:nth-child(even) { background: #f9f9f9; }
+  </style>
+</head>
+<body>
+
+<div id="splash-screen">
+  <img src="/images/Logo.jpeg" alt="PharmaChain Logo" class="splash-logo">
+  <p style="color: #7f8c8d; margin-top: 20px; letter-spacing: 2px;">SECURE PHARMA PARTNER</p>
+</div>
+
+<div id="main-content" style="display:none;">
+  <div class="navbar">
+    <img src="/images/Logo.jpeg" alt="logo">
+    <h2 style="margin: 0;">PharmaChain Dashboard</h2>
+  </div>
+
+  <div class="container">
+    <div class="card-grid">
+      <div class="card" onclick="window.location.href='/bill'">
+        <h1 style="margin:0;">📄</h1>
+        <h3>New Billing</h3>
+        <p>Create Invoices & WhatsApp</p>
+      </div>
+      <div class="card" onclick="loadInventory()">
+        <h1 style="margin:0;">📦</h1>
+        <h3>View Stock</h3>
+        <p>Check MySQL Inventory</p>
+      </div>
+    </div>
+
+    <div class="section-box">
+      <h3>➕ Add New Stock to Database</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <input type="text" id="mName" placeholder="Medicine Name">
+        <input type="text" id="mComp" placeholder="Company">
+        <input type="number" id="mPrice" placeholder="Price" step="0.01">
+        <input type="number" id="mQty" placeholder="Quantity">
+        <button onclick="saveStock()">Save Medicine</button>
+      </div>
+    </div>
+
+    <div id="inventory-display" class="section-box" style="display: none;">
+      <h3>Current Inventory Stock</h3>
+      <div id="table-container"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener('load', function() {
+      setTimeout(() => {
+          document.getElementById('splash-screen').style.display = 'none';
+          document.body.style.display = 'block';
+          document.getElementById('main-content').style.display = 'block';
+      }, 3000);
+  });
+
+  async function saveStock() {
+      const medData = {
+          name: document.getElementById('mName').value,
+          company: document.getElementById('mComp').value,
+          price: parseFloat(document.getElementById('mPrice').value),
+          quantity: parseInt(document.getElementById('mQty').value),
+          active: true
+      };
+
+      try {
+          const response = await fetch('/medicine/add', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(medData)
+          });
+          if(response.ok) {
+              alert("Medicine Added!");
+              loadInventory();
+          }
+      } catch (err) { alert("Error!"); }
+  }
+
+  async function loadInventory() {
+      document.getElementById('inventory-display').style.display = 'block';
+      const container = document.getElementById('table-container');
+      container.innerHTML = "Fetching...";
+      try {
+          const res = await fetch('/medicine/all');
+          const data = await res.json();
+          let html = `<table><tr><th>Name</th><th>Company</th><th>Price</th><th>Qty</th></tr>`;
+          data.forEach(m => {
+              html += `<tr><td>${m.name}</td><td>${m.company}</td><td>${m.price}</td><td>${m.quantity}</td></tr>`;
+          });
+          container.innerHTML = html + `</table>`;
+      } catch (e) { container.innerHTML = "Error loading data"; }
+  }
+</script>
+</body>
+</html>
