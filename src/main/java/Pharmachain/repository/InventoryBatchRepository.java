@@ -1,22 +1,18 @@
 package Pharmachain.repository;
 
+import Pharmachain.entity.InventoryBatch;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-import Pharmachain.entity.InventoryBatch;
-
 @Repository
-public interface InventoryBatchRepository
-        extends JpaRepository<InventoryBatch, Long> {
+public interface InventoryBatchRepository extends JpaRepository<InventoryBatch, Long> {
 
-    Optional<InventoryBatch> findByMedicineNameAndBatchNo(String medicineName, String batchNo);
+
     List<InventoryBatch> findByExpiryDateBefore(LocalDate date);
     List<InventoryBatch> findByExpiryDateGreaterThanEqualAndActiveTrue(LocalDate date);
-    List<InventoryBatch> findByQuantityLessThanAndActiveTrue(Integer threshold);
-    boolean existsByMedicineNameAndBatchNo(String medicineName, String batchNo);
     List<InventoryBatch> findByActiveTrue();
+    Optional<InventoryBatch> findByMedicineNameAndBatchNo(String medicineName, String batchNo);
 }

@@ -27,7 +27,7 @@ public class AdminDashboardController {
         Map<String, Object> report = new HashMap<>();
         report.put("totalSalesCount", allSales.size());
         report.put("totalTurnover", totalBusiness);
-        report.put("myTotalEarnings", totalCommission); // Yahan aapko apna 2.5% dikhega
+        report.put("myTotalEarnings", totalCommission);
 
         return report;
     }
