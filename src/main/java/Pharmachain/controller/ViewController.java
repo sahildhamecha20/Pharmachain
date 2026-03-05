@@ -28,6 +28,15 @@ public class ViewController {
     public String billingPage() {
         return "bill"; // templates/bill.html
     }
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String registerPage() {
+        return "register";
+    }
 
     // --- API Endpoints ---
     @GetMapping("/medicine/all")

@@ -69,7 +69,7 @@ public class InvoicePdfService {
         if (invoice.getItems() != null) {
             for (InvoiceItemDto item : invoice.getItems()) {
 
-                inventoryRepository.findByMedicineNameAndBatchNo(item.getMedicineName(), item.getBatchNo())
+                inventoryRepository.findByMedicineNameAndBatchId(item.getMedicineName(), item.getBatchNo())
                         .ifPresent(inventoryItem -> {
                             int currentStock = inventoryItem.getQuantity();
                             int billingQty = (int) item.getQuantity();

@@ -22,7 +22,7 @@ public class ExpiryAlertScheduler {
                 batchRepository.findByExpiryDateBefore(alertDate);
 
         batches.forEach(b ->
-                System.out.println("⚠ EXPIRY ALERT: " + b.getBatchNo())
+                System.out.println("⚠ EXPIRY ALERT: " + b.getBatchId())
         );
     }
 }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class InventoryBatchResponseDto {
     private Long id;
     private String medicineName;
-    private String batchNumber;
+    private String batchId;
     private Integer quantity;
     private LocalDate expiryDate;
     private Boolean active;
@@ -24,8 +24,8 @@ public class InventoryBatchResponseDto {
     public String getMedicineName() { return medicineName; }
     public void setMedicineName(String medicineName) { this.medicineName = medicineName; }
 
-    public String getBatchNumber() { return batchNumber; }
-    public void setBatchNumber(String batchNumber) { this.batchNumber = batchNumber; }
+    public String getBatchId() { return batchId; }
+    public void setBatchId(String batchId) { this.batchId = batchId; }
 
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }

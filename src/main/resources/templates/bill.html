@@ -2,75 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PharmaChain - Professional Billing System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PharmaChain | Smart Billing</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; padding: 20px; }
-    .container { max-width: 950px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); border-top: 8px solid #2c3e50; }
-    h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-    .header-settings { display: flex; gap: 15px; background: #eef2f3; padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid #d1d8e0; }
-    .header-settings div { flex: 1; display: flex; flex-direction: column; }
-    label { font-weight: bold; margin-bottom: 5px; color: #444; }
-    .input-group { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
-    input, select { padding: 12px; border: 1px solid #ccc; border-radius: 5px; flex: 1; min-width: 140px; outline: none; }
-    .btn-add { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-    .btn-save-db { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-    .btn-gen { background: #2c3e50; color: white; border: none; padding: 15px; border-radius: 5px; cursor: pointer; flex: 2; font-size: 16px; font-weight: bold; }
-    .btn-wa { background: #25D366; color: white; border: none; padding: 15px; border-radius: 5px; cursor: pointer; flex: 1; font-size: 16px; font-weight: bold; display: none; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-    th { background-color: #2c3e50; color: white; }
-    .summary { text-align: right; margin-top: 25px; font-size: 20px; border-top: 2px solid #eee; padding-top: 15px; }
+    :root { --primary: #4361ee; --secondary: #3f37c9; --success: #4cc9f0; }
+    body { background-color: #f8f9fc; font-family: 'Inter', sans-serif; }
+    .billing-card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); background: white; }
+    .btn-whatsapp { background-color: #25D366; color: white; border: none; transition: 0.3s; }
+    .btn-whatsapp:hover { background-color: #128C7E; color: white; transform: translateY(-2px); }
+    .table-custom thead { background: var(--primary); color: white; }
+    .total-section { background: #f1f5f9; border-radius: 12px; padding: 20px; }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h2>PharmaChain Billing</h2>
-  <div class="header-settings">
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <label>Pharmacy Name</label>
-      <input type="text" id="shopName" value="Shree Medical Store">
+      <h2 class="fw-bold text-dark m-0"><i class="bi bi-receipt-cutoff text-primary me-2"></i>Smart Billing</h2>
+      <p class="text-muted small">Create and share invoices instantly</p>
     </div>
-    <div>
-      <label>Customer Name</label>
-      <input type="text" id="custName" placeholder="Enter Customer Name">
+    <a href="/" class="btn btn-outline-secondary rounded-pill px-4"><i class="bi bi-arrow-left me-2"></i>Dashboard</a>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="card billing-card p-4">
+        <h5 class="fw-bold mb-4">Add Product</h5>
+        <div class="mb-3">
+          <label class="small fw-bold text-muted">MEDICINE NAME</label>
+          <input type="text" id="itemName" class="form-control" placeholder="e.g. Paracetamol">
+        </div>
+        <div class="row mb-3">
+          <div class="col-6">
+            <label class="small fw-bold text-muted">BATCH ID</label>
+            <input type="text" id="batch" class="form-control" placeholder="BT-99">
+          </div>
+          <div class="col-6">
+            <label class="small fw-bold text-muted">QTY</label>
+            <input type="number" id="qty" class="form-control" value="1">
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="small fw-bold text-muted">UNIT PRICE (₹)</label>
+          <input type="number" id="price" class="form-control" placeholder="0.00">
+        </div>
+        <button onclick="addItem()" class="btn btn-primary w-100 py-3 fw-bold rounded-3 shadow-sm mb-2">
+          <i class="bi bi-plus-lg me-2"></i>ADD TO BILL
+        </button>
+        <button onclick="saveToLiveStock()" class="btn btn-dark w-100 py-2 fw-bold rounded-3">
+          <i class="bi bi-cloud-upload me-2"></i>PUSH TO LIVE STOCK
+        </button>
+      </div>
     </div>
-  </div>
 
-  <div class="input-group">
-    <select id="itemCategory">
-      <option value="Medicine">Medicine</option>
-      <option value="Cosmetic">Cosmetic/General</option>
-    </select>
-    <input type="text" id="itemName" placeholder="Item Name">
-    <input type="text" id="batch" placeholder="Batch No">
-    <input type="number" id="qty" placeholder="Qty">
-    <input type="number" id="price" placeholder="Price">
-    <button class="btn-add" onclick="addItem()">+ ADD TO BILL</button>
-    <button class="btn-save-db" onclick="saveToDatabase()">💾 SAVE TO INVENTORY</button>
-  </div>
+    <div class="col-lg-8">
+      <div class="card billing-card p-4 h-100">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle table-custom">
+            <thead>
+            <tr>
+              <th>Item</th>
+              <th>Batch</th>
+              <th class="text-center">Qty</th>
+              <th class="text-center">Price</th>
+              <th class="text-end">Total</th>
+            </tr>
+            </thead>
+            <tbody id="billBody">
+            </tbody>
+          </table>
+        </div>
 
-  <table>
-    <thead>
-    <tr>
-      <th>Category</th>
-      <th>Description</th>
-      <th>Batch</th>
-      <th>Qty</th>
-      <th>Price</th>
-      <th>Total</th>
-    </tr>
-    </thead>
-    <tbody id="billBody"></tbody>
-  </table>
-
-  <div class="summary">
-    <strong>Grand Total: ₹<span id="displayTotal">0.00</span></strong>
-  </div>
-
-  <div class="footer-btns">
-    <button class="btn-gen" onclick="generateInvoice()">📄 GENERATE INVOICE</button>
-    <button id="waBtn" class="btn-wa" onclick="sendWhatsApp()">💬 SHARE ON WHATSAPP</button>
+        <div class="mt-auto pt-4 border-top">
+          <div class="row align-items-center">
+            <div class="col-md-6 total-section">
+              <span class="text-muted fw-bold">GRAND TOTAL</span>
+              <h2 class="fw-bold text-primary m-0">₹<span id="displayTotal">0.00</span></h2>
+            </div>
+            <div class="col-md-6 text-end">
+              <button onclick="generatePDF()" class="btn btn-outline-dark px-4 py-2 me-2 rounded-pill fw-bold">
+                <i class="bi bi-file-earmark-pdf me-2"></i>PDF
+              </button>
+              <button onclick="sendWhatsApp()" class="btn btn-whatsapp px-4 py-2 rounded-pill fw-bold shadow-sm">
+                <i class="bi bi-whatsapp me-2"></i>WHATSAPP BILL
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -78,111 +101,81 @@
   let itemsList = [];
 
   function addItem() {
-      const cat = document.getElementById('itemCategory').value;
-      const name = document.getElementById('itemName').value;
-      const batch = document.getElementById('batch').value;
-      const qty = parseFloat(document.getElementById('qty').value);
-      const price = parseFloat(document.getElementById('price').value);
+    const name = document.getElementById('itemName').value;
+    const batch = document.getElementById('batch').value;
+    const qty = parseFloat(document.getElementById('qty').value);
+    const price = parseFloat(document.getElementById('price').value);
 
-      if(!name || !qty || !price) { alert("Please fill all item details."); return; }
+    if(!name || !qty || !price) { alert("Please fill all details!"); return; }
 
-      itemsList.push({
-          medicineName: name,
-          batchNo: batch || "N/A",
-          quantity: qty,
-          price: price,
-          expiryDate: "2027-12-31"
+    itemsList.push({ name, batch: batch || 'N/A', qty, price, total: qty * price });
+    updateTable();
+    clearInputs();
+  }
+
+  function updateTable() {
+    const body = document.getElementById('billBody');
+    let grandTotal = 0;
+    body.innerHTML = "";
+    itemsList.forEach((item, index) => {
+      grandTotal += item.total;
+      body.innerHTML += `
+        <tr>
+          <td class="fw-bold text-dark">${item.name}</td>
+          <td class="text-muted small">${item.batch}</td>
+          <td class="text-center">${item.qty}</td>
+          <td class="text-center">₹${item.price.toFixed(2)}</td>
+          <td class="text-end fw-bold">₹${item.total.toFixed(2)}</td>
+        </tr>`;
+    });
+    document.getElementById('displayTotal').innerText = grandTotal.toFixed(2);
+  }
+
+  function clearInputs() {
+    document.getElementById('itemName').value = '';
+    document.getElementById('batch').value = '';
+    document.getElementById('price').value = '';
+  }
+
+  async function saveToLiveStock() {
+    if(itemsList.length === 0) { alert("Add at least one item first!"); return; }
+
+    // Sirf last added item ko stock mein bhejne ke liye logic
+    const lastItem = itemsList[itemsList.length - 1];
+    const data = {
+      medicineName: lastItem.name,
+      batchId: lastItem.batch,
+      quantity: lastItem.qty,
+      sellingPrice: lastItem.price,
+      expiryDate: "2027-12-31" // Default expiry
+    };
+
+    try {
+      const res = await fetch('/api/inventory/batch/add', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
       });
-      updateTable(cat);
+      if(res.ok) alert("Stock Updated Live! 🚀");
+    } catch (e) { alert("Azure Sync Failed!"); }
   }
 
-  async function saveToDatabase() {
-      const name = document.getElementById('itemName').value;
-      const batch = document.getElementById('batch').value;
-      const qty = parseFloat(document.getElementById('qty').value);
-      const price = parseFloat(document.getElementById('price').value);
+  function sendWhatsApp() {
+    if(itemsList.length === 0) { alert("Bill is empty!"); return; }
+    const phone = prompt("Enter WhatsApp Number (10 digits):");
+    if(!phone) return;
 
-      if(!name || !qty || !price) { alert("Please provide valid product details."); return; }
+    let text = `*PharmaChain - Digital Invoice*%0A---------------------------%0A`;
+    itemsList.forEach(i => {
+      text += `${i.name} | Qty: ${i.qty} | ₹${i.total}%0A`;
+    });
+    text += `---------------------------%0A*Total: ₹${document.getElementById('displayTotal').innerText}*%0A_Thank you for your visit!_`;
 
-      const inventoryData = {
-          medicineName: name,
-          batchNo: batch || "N/A",
-          quantity: qty,
-          sellingPrice: price,
-          expiryDate: "2027-12-31"
-      };
-
-      try {
-          const response = await fetch('/api/inventory/batch/add', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(inventoryData)
-          });
-
-          if(response.ok) {
-              alert("Inventory updated successfully.");
-              document.getElementById('itemName').value = '';
-              document.getElementById('batch').value = '';
-              document.getElementById('qty').value = '';
-              document.getElementById('price').value = '';
-          }
-      } catch (err) { alert("Network Error: Could not connect to server."); }
+    window.open(`https://wa.me/91${phone}?text=${text}`, '_blank');
   }
 
-  function updateTable(cat) {
-      const body = document.getElementById('billBody');
-      let total = 0;
-      body.innerHTML = "";
-      itemsList.forEach(item => {
-          const rowTotal = item.quantity * item.price;
-          total += rowTotal;
-          body.innerHTML += `<tr>
-              <td>${cat}</td>
-              <td>${item.medicineName}</td>
-              <td>${item.batchNo}</td>
-              <td>${item.quantity}</td>
-              <td>${item.price.toFixed(2)}</td>
-              <td>${rowTotal.toFixed(2)}</td>
-          </tr>`;
-      });
-      document.getElementById('displayTotal').innerText = total.toFixed(2);
-  }
-
-  async function generateInvoice() {
-      if(itemsList.length === 0) { alert("Bill is empty."); return; }
-      let subTotal = itemsList.reduce((acc, item) => acc + (item.quantity * item.price), 0);
-      const invoiceData = {
-          pharmacyName: document.getElementById('shopName').value,
-          customerName: document.getElementById('custName').value || "Guest Customer",
-          invoiceNumber: "INV-" + Date.now().toString().slice(-6),
-          subTotal: subTotal,
-          grandTotal: subTotal,
-          items: itemsList
-      };
-      const response = await fetch('/api/invoice/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(invoiceData)
-      });
-      if (response.ok) {
-          const blob = await response.blob();
-          window.open(window.URL.createObjectURL(blob), '_blank');
-          document.getElementById('waBtn').style.display = "block";
-          window.currentInvoiceData = invoiceData;
-      }
-  }
-
-  async function sendWhatsApp() {
-      const phone = prompt("Enter Customer WhatsApp Number (10 digits):");
-      if(phone && phone.length === 10) {
-          window.currentInvoiceData.customerMobile = phone;
-          await fetch('/api/whatsapp/send-invoice', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(window.currentInvoiceData)
-          });
-          alert("Invoice shared via WhatsApp.");
-      }
+  function generatePDF() {
+    window.print(); // Simple way to generate invoice for now
   }
 </script>
 </body>

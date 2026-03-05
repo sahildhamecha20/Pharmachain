@@ -1,12 +1,122 @@
 <!DOCTYPE html>
-<html>
-<body>
-<h2>🔐 PharmaChain Login</h2>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PharmaChain | Secure Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<form method="post" action="/login">
-    <input name="username" placeholder="username"><br>
-    <input type="password" name="password" placeholder="password"><br>
-    <button type="submit">Login</button>
-</form>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        :root { --primary: #4361ee; }
+        body {
+            background: #f1f5f9;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .login-card {
+            width: 380px;
+            padding: 40px;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-card shadow-lg">
+    <div class="text-center mb-4">
+        <div class="logo-icon shadow-sm">
+            <i class="bi bi-shield-lock-fill"></i>
+        </div>
+        <h3 class="fw-bold text-dark m-0">PharmaChain</h3>
+        <p class="text-muted small">Cloud Portal Access</p>
+    </div>
+
+    <div class="mb-3">
+        <label class="small fw-bold text-muted">EMAIL</label>
+        <input type="email" id="email" class="form-control p-3 border-secondary-subtle"
+               placeholder="user@pharmachain.com" required>
+    </div>
+
+    <div class="mb-4">
+        <label class="small fw-bold text-muted">PASSWORD</label>
+        <input type="password" id="password" class="form-control p-3 border-secondary-subtle"
+               placeholder="••••••••" required>
+    </div>
+
+    <button type="button" onclick="handleLogin()"
+            class="btn btn-primary w-100 p-3 fw-bold rounded-3 shadow">
+        SIGN IN
+    </button>
+
+    <div class="text-center mt-4">
+        <a href="/register" class="small text-decoration-none fw-bold">
+            Register New Partner
+        </a>
+    </div>
+</div>
+
+<script>
+    async function handleLogin() {
+
+        const emailInput = document.getElementById("email").value.trim();
+        const passwordInput = document.getElementById("password").value;
+
+        if (!emailInput || !passwordInput) {
+            alert("Please enter both Email and Password");
+            return;
+        }
+
+        try {
+            const response = await fetch(window.location.origin + "/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: emailInput,
+                    password: passwordInput
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("userId", data.userId);
+                localStorage.setItem("userRole", data.role);
+                localStorage.setItem("userName", data.username);
+
+                window.location.href = "/";
+            } else {
+                alert("Access Denied: " + (data.error || "Invalid email or password"));
+            }
+
+        } catch (error) {
+            console.error("Login Error:", error);
+            alert("Server Connection Error!");
+        }
+    }
+</script>
+
 </body>
 </html>

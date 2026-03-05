@@ -14,5 +14,5 @@ public interface InventoryBatchRepository extends JpaRepository<InventoryBatch, 
     List<InventoryBatch> findByExpiryDateBefore(LocalDate date);
     List<InventoryBatch> findByExpiryDateGreaterThanEqualAndActiveTrue(LocalDate date);
     List<InventoryBatch> findByActiveTrue();
-    Optional<InventoryBatch> findByMedicineNameAndBatchNo(String medicineName, String batchNo);
+    Optional<InventoryBatch> findByMedicineNameAndBatchId(String medicineName, String batchId);
 }

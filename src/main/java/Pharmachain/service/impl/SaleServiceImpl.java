@@ -22,8 +22,8 @@ public class SaleServiceImpl implements SaleService {
     @Override
     @Transactional
     public Sale createBill(SaleRequestDto request) {
-        InventoryBatch batch = inventoryRepo.findByMedicineNameAndBatchNo(
-                        request.getMedicineName(), request.getBatchNo())
+        InventoryBatch batch = inventoryRepo.findByMedicineNameAndBatchId(
+                        request.getMedicineName(), request.getBatchId())
                 .orElseThrow(() -> new RuntimeException("Medicine/Batch not found!"));
 
         if (batch.getQuantity() < request.getQuantity()) {

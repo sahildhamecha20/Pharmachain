@@ -69,7 +69,7 @@ public class InventoryBatchServiceImpl implements InventoryBatchService {
     private InventoryBatchResponseDto mapToResponseDto(InventoryBatch batch) {
         InventoryBatchResponseDto dto = new InventoryBatchResponseDto();
         BeanUtils.copyProperties(batch, dto);
-        dto.setBatchNumber(batch.getBatchNo());
+        dto.setBatchId(batch.getBatchId());
         return dto;
     }
 }

@@ -25,7 +25,7 @@ public class ExpiryAlertJob {
 
         expiring.forEach(b ->
                 System.out.println("⚠ EXPIRING: " +
-                        "Batch: " + b.getBatchNo() +
+                        "Batch: " + b.getBatchId() +
                         " | Expiry: " + b.getExpiryDate())
         );
     }
