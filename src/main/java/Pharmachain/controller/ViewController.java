@@ -1,53 +1,37 @@
 package Pharmachain.controller;
 
-import Pharmachain.entity.Medicine;
-import Pharmachain.repository.MedicineRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ViewController {
 
-    @Autowired
-    private MedicineRepository medicineRepository;
-
-    @GetMapping("/splash")
-    public String splashPage() {
-        return "splash";
-    }
-
-    // 2. Main Dashboard mapping
-    @GetMapping("/")
-    public String index() {
-        return "index"; // templates/index.html
-    }
-
-    @GetMapping("/bill")
-    public String billingPage() {
-        return "bill"; // templates/bill.html
-    }
     @GetMapping("/login")
-    public String loginPage() {
-        return "login";
+    public String login() {
+        return "login"; // login.html
     }
 
     @GetMapping("/register")
-    public String registerPage() {
-        return "register";
+    public String register() {
+        return "register"; // register.html
     }
 
-    // --- API Endpoints ---
-    @GetMapping("/medicine/all")
-    @ResponseBody
-    public List<Medicine> getAllMedicines() {
-        return medicineRepository.findAll();
+    @GetMapping("/dashboard")
+    public String showdashboard() {
+        return "dashboard"; // dashboard.html
+    }
+    @GetMapping("/bill")
+    public String billing() {
+        return "bill";
     }
 
-    @PostMapping("/medicine/add")
-    @ResponseBody
-    public Medicine addMedicine(@RequestBody Medicine medicine) {
-        return medicineRepository.save(medicine);
+    @GetMapping("/inventory")
+    public String inventory() {
+        return "inventory"; // inventory.html
+    }
+
+    @GetMapping("/audit-logs")
+    public String auditLogs() {
+        return "audit-logs"; // audit-logs.html
     }
 }

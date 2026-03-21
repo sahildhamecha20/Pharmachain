@@ -8,6 +8,8 @@ import Pharmachain.repository.InventoryBatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,15 +32,17 @@ public class SaleServiceImpl implements SaleService {
             throw new RuntimeException("Insufficient stock!");
         }
 
+        // Stock Update
         batch.setQuantity(batch.getQuantity() - request.getQuantity());
         inventoryRepo.save(batch);
 
+        // Total Amount Calculation (No Commission)
         double totalAmount = batch.getSellingPrice() * request.getQuantity();
-        double myCut = (totalAmount * 2.5) / 100;
 
         Sale sale = new Sale();
         sale.setTotalBillAmount(totalAmount);
-        sale.setCommissionEarned(myCut);
+        sale.setCommissionEarned(0.0); // Commission removed as requested
+        sale.setSaleDate(LocalDateTime.now());
 
         return saleRepo.save(sale);
     }

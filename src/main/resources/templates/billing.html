@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PharmaChain | Billing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .main-container { padding: 30px; background: #fff; border-radius: 10px; margin-top: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-dark bg-dark px-4">
+    <a class="navbar-brand" href="/dashboard"><b>PHARMACHAIN</b></a>
+    <span class="text-white">Billing System</span>
+</nav>
+
+<div class="container main-container">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <input type="text" id="custName" class="form-control" placeholder="Customer Name">
+        </div>
+        <div class="col-md-6">
+            <input type="text" id="pharmacyName" class="form-control" value="My Pharmacy Store">
+        </div>
+    </div>
+
+    <div class="card p-3 mb-4 bg-light border-0">
+        <div class="row g-2">
+            <div class="col-md-4"><input type="text" id="itemMed" class="form-control" placeholder="Medicine Name"></div>
+            <div class="col-md-2"><input type="number" id="itemQty" class="form-control" placeholder="Qty"></div>
+            <div class="col-md-2"><input type="number" id="itemPrice" class="form-control" placeholder="Price"></div>
+            <div class="col-md-4"><button onclick="addItem()" class="btn btn-primary w-100">Add to List</button></div>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+        <tr><th>Medicine</th><th>Quantity</th><th>Price</th><th>Total</th></tr>
+        </thead>
+        <tbody id="billItems"></tbody>
+    </table>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h3>Total: ₹<span id="grandTotal">0</span></h3>
+        <button onclick="generateBill()" class="btn btn-success btn-lg"><i class="fa fa-print"></i> Generate & Download PDF</button>
+    </div>
+</div>
+
+<script>
+    let items = [];
+    function addItem() {
+        let med = document.getElementById('itemMed').value;
+        let qty = parseInt(document.getElementById('itemQty').value);
+        let prc = parseFloat(document.getElementById('itemPrice').value);
+
+        if(med && qty > 0) {
+            items.push({ medicineName: med, quantity: qty, price: prc });
+            renderTable();
+        }
+    }
+
+    function renderTable() {
+        let html = ""; let total = 0;
+        items.forEach(i => {
+            let t = i.quantity * i.price;
+            total += t;
+            html += `<tr><td>${i.medicineName}</td><td>${i.quantity}</td><td>₹${i.price}</td><td>₹${t}</td></tr>`;
+        });
+        document.getElementById('billItems').innerHTML = html;
+        document.getElementById('grandTotal').innerText = total;
+    }
+
+    async function generateBill() {
+        const billData = {
+            customerName: document.getElementById('custName').value,
+            pharmacyName: document.getElementById('pharmacyName').value,
+            items: items,
+            totalAmount: parseFloat(document.getElementById('grandTotal').innerText)
+        };
+
+        const response = await fetch('/api/bill/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(billData)
+        });
+
+        if(response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'bill.pdf'; a.click();
+        }
+    }
+</script>
+</body>
+</html>

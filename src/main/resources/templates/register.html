@@ -3,103 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <title>PharmaChain | Register</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <style>
-    :root { --primary: #4361ee; }
-    body {
-        background: #f1f5f9;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Inter', sans-serif;
-    }
-    .register-card {
-        width: 400px;
-        padding: 40px;
-        border-radius: 20px;
-        background: white;
-        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-        border: 1px solid #e2e8f0;
-    }
+    body { background: #f4f7f6; display: flex; align-items: center; height: 100vh; }
+    .reg-card { width: 100%; max-width: 500px; margin: auto; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); background: #fff; }
+    .btn-dark { background: #2c3e50; border: none; }
   </style>
 </head>
-
 <body>
-
-<div class="register-card shadow-lg">
-  <h3 class="text-center fw-bold mb-4">Register New Partner</h3>
-
-  <div class="mb-3">
-    <label class="small fw-bold text-muted">USERNAME</label>
-    <input type="text" id="username" class="form-control p-3" placeholder="Enter username" required>
-  </div>
-
-  <div class="mb-3">
-    <label class="small fw-bold text-muted">EMAIL</label>
-    <input type="email" id="email" class="form-control p-3" placeholder="user@pharmachain.com" required>
-  </div>
-
-  <div class="mb-4">
-    <label class="small fw-bold text-muted">PASSWORD</label>
-    <input type="password" id="password" class="form-control p-3" placeholder="••••••••" required>
-  </div>
-
-  <button type="button" onclick="handleRegister()"
-          class="btn btn-primary w-100 p-3 fw-bold rounded-3 shadow">
-    REGISTER
-  </button>
-
-  <div class="text-center mt-4">
-    <a href="/login" class="small text-decoration-none fw-bold">
-      Already have an account? Login
-    </a>
+<div class="reg-card">
+  <h2 class="text-center mb-4"><b>PHARMACHAIN</b></h2>
+  <h5 class="text-center text-muted mb-4">Create New Account</h5>
+  <form id="regForm">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <input type="text" id="name" class="form-control" placeholder="Full Name" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <input type="text" id="username" class="form-control" placeholder="Username" required>
+      </div>
+    </div>
+    <div class="mb-3">
+      <input type="email" id="email" class="form-control" placeholder="Email Address" required>
+    </div>
+    <div class="mb-3">
+      <input type="text" id="mobile" class="form-control" placeholder="Mobile Number" required>
+    </div>
+    <div class="mb-3">
+      <input type="password" id="password" class="form-control" placeholder="Password" required>
+    </div>
+    <button type="submit" class="btn btn-dark w-100">Register</button>
+  </form>
+  <div class="text-center mt-3">
+    <p>Already have an account? <a href="/login" class="text-decoration-none">Login</a></p>
   </div>
 </div>
 
 <script>
-  async function handleRegister() {
+  document.getElementById('regForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userData = {
+          name: document.getElementById('name').value,
+          username: document.getElementById('username').value,
+          email: document.getElementById('email').value,
+          mobile: document.getElementById('mobile').value,
+          password: document.getElementById('password').value,
+          role: "USER"
+      };
 
-      const username = document.getElementById("username").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+      const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userData)
+      });
 
-      if (!username || !email || !password) {
-          alert("Please fill all fields");
-          return;
-      }
-
-      try {
-          const response = await fetch(window.location.origin + "/api/auth/register", {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                  username: username,
-                  email: email,
-                  password: password
-              })
-          });
-
-          const data = await response.json();
-
-          if (response.ok) {
-              alert("Registration Successful! Please login.");
-              window.location.href = "/login";
-          } else {
-              alert("Error: " + (data.error || "Registration failed"));
-          }
-
-      } catch (error) {
-          console.error("Register Error:", error);
-          alert("Server Connection Error!");
-      }
-  }
+      if(res.ok) { alert("Registration Successful!"); window.location.href = '/login'; }
+      else { alert("Error in registration"); }
+  });
 </script>
-
 </body>
 </html>

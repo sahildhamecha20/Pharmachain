@@ -1,7 +1,10 @@
 package Pharmachain.dto;
 
-public class LoginRequestDto {
-    private String username;
+import lombok.Data;
+
+@Data
+public class LoginRequest {
+    private String email;
 
     public String getPassword() {
         return password;
@@ -11,14 +14,13 @@ public class LoginRequestDto {
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     private String password;
-
 }
