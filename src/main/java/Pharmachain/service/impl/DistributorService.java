@@ -4,10 +4,8 @@ import Pharmachain.entity.Distributor;
 import java.util.List;
 
 public interface DistributorService {
-
-    Distributor addDistributor(Distributor distributor);
-
+    Distributor saveDistributor(Distributor distributor);
+    List<Distributor> getAllDistributors();
     List<Distributor> getActiveDistributors();
-
-    void deactivateDistributor(Long id);
+    void deleteDistributor(Long id);
 }

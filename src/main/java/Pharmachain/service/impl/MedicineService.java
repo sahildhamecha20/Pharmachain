@@ -4,18 +4,10 @@ import Pharmachain.entity.Medicine;
 import java.util.List;
 
 public interface MedicineService {
-
-    Medicine addMedicine(Medicine medicine);
-
+    Medicine saveMedicine(Medicine medicine);
     List<Medicine> getAllMedicines();
-
+    List<Medicine> getActiveMedicines();
     Medicine getMedicineById(Long id);
-
-    Medicine updateMedicine(Long id, Medicine medicine);
-
+    void updateStock(Long id, int quantity);
     void deleteMedicine(Long id);
-
-    List<Medicine> getExpiredMedicines();
-
-    List<Medicine> getExpiringSoonMedicines();
 }

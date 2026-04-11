@@ -1,31 +1,34 @@
 package Pharmachain.controller;
-
 import Pharmachain.entity.User;
-import Pharmachain.repository.UserRepository;
+import Pharmachain.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
-    @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody Pharmachain.entity.User user) {
+        try {
+            return ResponseEntity.ok(userService.registerUser(user));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
+        try {
+            Pharmachain.entity.User user = userService.loginUser(email, password);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 }

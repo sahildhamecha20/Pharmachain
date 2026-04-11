@@ -1,14 +1,16 @@
 package Pharmachain.service.impl;
 
-import Pharmachain.dto.SaleRequestDto;
-import Pharmachain.entity.Sale;
+import Pharmachain.Dto.CartItemDTO;
+import Pharmachain.Dto.SaleRequestDTO;
 import Pharmachain.entity.InventoryBatch;
-import Pharmachain.repository.SaleRepository;
+import Pharmachain.entity.Sale;
 import Pharmachain.repository.InventoryBatchRepository;
+import Pharmachain.repository.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,39 +18,42 @@ import java.util.List;
 public class SaleServiceImpl implements SaleService {
 
     @Autowired
-    private SaleRepository saleRepo;
+    private SaleRepository saleRepository;
 
     @Autowired
-    private InventoryBatchRepository inventoryRepo;
+    private InventoryBatchRepository batchRepository;
 
     @Override
     @Transactional
-    public Sale createBill(SaleRequestDto request) {
-        InventoryBatch batch = inventoryRepo.findByMedicineNameAndBatchId(
-                        request.getMedicineName(), request.getBatchId())
-                .orElseThrow(() -> new RuntimeException("Medicine/Batch not found!"));
+    public Sale processSale(SaleRequestDTO request) {
+        Sale sale = new Sale();
+        sale.setInvoiceNumber("INV-" + System.currentTimeMillis());
+        sale.setSaleDate(LocalDateTime.now());
+        sale.setPaymentMode(request.getPaymentMode());
 
-        if (batch.getQuantity() < request.getQuantity()) {
-            throw new RuntimeException("Insufficient stock!");
+        double grandTotal = 0;
+
+        for (CartItemDTO item : request.getItems()) {
+            InventoryBatch batch = batchRepository.findById(item.getBatchId())
+                    .orElseThrow(() -> new RuntimeException("Batch not found for ID: " + item.getBatchId()));
+
+            if (batch.getQuantity() < item.getQuantity()) {
+                throw new RuntimeException("Stock khatam for: " + batch.getMedicineName());
+            }
+
+            // Stock minus karo
+            batch.setQuantity(batch.getQuantity() - item.getQuantity());
+            batchRepository.save(batch);
+
+            // Price add karo
+            grandTotal += batch.getPrice() * item.getQuantity();
         }
 
-        // Stock Update
-        batch.setQuantity(batch.getQuantity() - request.getQuantity());
-        inventoryRepo.save(batch);
-
-        // Total Amount Calculation (No Commission)
-        double totalAmount = batch.getSellingPrice() * request.getQuantity();
-
-        Sale sale = new Sale();
-        sale.setTotalBillAmount(totalAmount);
-        sale.setCommissionEarned(0.0); // Commission removed as requested
-        sale.setSaleDate(LocalDateTime.now());
-
-        return saleRepo.save(sale);
+        sale.setTotalBillAmount(grandTotal);
+        return saleRepository.save(sale);
     }
-
     @Override
-    public List<Sale> getAllSales() {
-        return saleRepo.findAll();
+    public List<Sale> getSaleHistory() {
+        return saleRepository.findAll();
     }
 }

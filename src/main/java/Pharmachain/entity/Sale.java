@@ -14,8 +14,25 @@ public class Sale {
     private Double totalBillAmount;
     private Double commissionEarned;
     private LocalDateTime saleDate = LocalDateTime.now();
+    private String invoiceNumber;
+    private String paymentMode;
 
-    // Footer Line (Disclaimer)
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
+    public String getPaymentMode() {
+        return paymentMode;
+    }
+
+    public void setPaymentMode(String paymentMode) {
+        this.paymentMode = paymentMode;
+    }
+
     public static final String RETURN_POLICY = "Once sold, medicine cannot be returned.";
 
     // --- Getters and Setters ---

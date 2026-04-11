@@ -1,35 +1,40 @@
 package Pharmachain.entity;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "inventory_batches")
-@Data
 public class InventoryBatch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String batchId;
-    private Integer quantity;
+    private String medicineName;
+    private String batchNumber;
     private LocalDate expiryDate;
+    private Integer quantity;
+    private Double price;
 
-    public Long getId() {
-        return id;
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
-    public String getBatchId() {
-        return batchId;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setBatchId(String batchId) {
-        this.batchId = batchId;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public Integer getQuantity() {
@@ -48,37 +53,31 @@ public class InventoryBatch {
         this.expiryDate = expiryDate;
     }
 
-    public double getSellingPrice() {
-        return sellingPrice;
+    public String getBatchNumber() {
+        return batchNumber;
     }
 
-    public void setSellingPrice(double sellingPrice) {
-        this.sellingPrice = sellingPrice;
+    public void setBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber;
     }
 
-    public boolean isActive() {
-        return active;
+    public String getMedicineName() {
+        return medicineName;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setMedicineName(String medicineName) {
+        this.medicineName = medicineName;
     }
 
-    public Medicine getMedicine() {
-        return medicine;
+    public Long getId() {
+        return id;
     }
 
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    private double sellingPrice;
-    private boolean active = true;
+    private Boolean active = true;
 
-    @ManyToOne
-    @JoinColumn(name = "medicine_id")
-    private Medicine medicine;
-
-
-
+    // Standard Getters & Setters
 }

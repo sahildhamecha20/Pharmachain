@@ -1,31 +1,35 @@
 package Pharmachain.controller;
 
-import Pharmachain.dto.InventoryBatchResponseDto;
+import Pharmachain.entity.InventoryBatch;
+
 import Pharmachain.service.impl.InventoryBatchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/inventory/batch")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/inventory")
+@CrossOrigin("*")
 public class InventoryBatchController {
 
     @Autowired
     private InventoryBatchService service;
 
-    @GetMapping
-    public List<InventoryBatchResponseDto> getAll() {
-        return service.getActiveBatches();
+    @PostMapping("/save")
+    public ResponseEntity<InventoryBatch> addBatch(@RequestBody InventoryBatch batch) {
+        return ResponseEntity.ok(service.saveBatch(batch));
     }
 
-    @GetMapping("/expiry-alerts")
-    public List<InventoryBatchResponseDto> getExpiryAlerts() {
-        return service.getExpiryAlerts();
+    @GetMapping("/all")
+    public ResponseEntity<List<InventoryBatch>> getAll() {
+        return ResponseEntity.ok(service.getAllBatches());
     }
 
-    @GetMapping("/low-stock")
-    public List<InventoryBatchResponseDto> getLowStock(@RequestParam(defaultValue = "10") Integer threshold) {
-        return service.getLowStock(threshold);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        service.deleteBatch(id);
+        return ResponseEntity.ok("Deleted Successfully");
     }
 }

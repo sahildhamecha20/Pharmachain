@@ -1,53 +1,26 @@
-# PharmaChain 🚑💊
+# PharmaChain - Advanced Pharmacy Inventory & Strategic Management System
 
-PharmaChain is a backend-first Pharmacy Inventory & Order Management System
-designed for real-world pharmaceutical operations.
+PharmaChain is a comprehensive, full-stack enterprise solution designed to streamline pharmaceutical operations, enhance inventory accuracy, and digitize the retail pharmacy experience.
 
-## 🚀 Features
-- Medicine & Batch-wise Inventory
-- Expiry Date Tracking (30/60/90 days ready)
-- Order Management with Transaction Safety
-- Distributor (Supplier) Management
-- Reports: Low Stock, Expiry, Full Stock
-- Global Exception Handling
-- DTO-based Clean APIs
-- Basic Authentication & Role-based Access
-- Validation & Compliance-ready Design
+## 🌟 Core Functionalities
+- **Precision Quick Billing:** High-performance search engine for instantaneous product retrieval and invoice generation.
+- **Digital Invoice Ecosystem:** Seamless WhatsApp integration to deliver paperless billing directly to customer mobile devices.
+- **Optimized Print Engine:** Dedicated CSS print-media logic for professional physical invoices, featuring dynamic QR payment codes and regulatory details.
+- **Real-Time Inventory Intelligence:** Automated tracking for 40+ medical and cosmetic categories with live stock synchronization.
+- **Proactive Alert System:** Visual dashboard indicators for low-stock thresholds and critical inventory updates.
+- **Financial Analytics:** Real-time monitoring of daily sales, revenue metrics, and transaction history.
 
-## 🏗 Architecture
-- Spring Boot (JDK 8 compatible)
-- Layered Architecture
-    - Controller
-    - Service
-    - Repository
-    - Entity
-    - DTO
-    - Exception
-    - Security
-- MySQL Database
-- Maven Build Tool
+## 🛠 Technical Specification
+- **Backend Architecture:** Java 8, Spring Boot Framework, Maven.
+- **Data Management:** MySQL Relational Database with optimized schema for batch and expiry tracking.
+- **Frontend Interface:** Responsive UI built with HTML5, Bootstrap 5, and JavaScript.
+- **Security Protocol:** Spring Security implementation for robust authentication and role-based access control.
 
-## 🔐 Security
-- Basic Authentication
-- Roles:
-    - ADMIN → Full Access
-    - STAFF → Reports Access
-
-## ⚙️ Transaction Management
-- Atomic order placement
-- Auto stock deduction
-- Rollback on failure
-
-## 📦 Modules
-1. Inventory & Batch
-2. Orders
-3. Distributors
-4. Reports
-5. Security
-6. Exception Handling
-
-## 🧪 API Testing
-(Postman testing will be added later)
+## 🏗 System Design
+- **Controller Layer:** RESTful endpoints managing dashboard operations and inventory flow.
+- **Service Layer:** Encapsulated business logic for transaction safety and stock calculations.
+- **Persistence Layer:** Spring Data JPA for efficient database interaction.
+- **Utility Layer:** Integrated WhatsApp API and Print optimization modules.
 
 ## 👨‍💻 Developer
-Built with Sahil Dhamecha
+**Sahil Dhamecha** *Lead Developer & System Architect*

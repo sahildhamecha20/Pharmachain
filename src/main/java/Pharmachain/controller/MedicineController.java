@@ -3,50 +3,43 @@ package Pharmachain.controller;
 import Pharmachain.entity.Medicine;
 import Pharmachain.service.impl.MedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/medicine")
+@RequestMapping("/api/medicines")
+@CrossOrigin("*")
 public class MedicineController {
 
     @Autowired
     private MedicineService medicineService;
 
     @PostMapping("/add")
-    public Medicine addMedicine(@RequestBody Medicine medicine) {
-        return medicineService.addMedicine(medicine);
+    public ResponseEntity<Medicine> add(@RequestBody Medicine medicine) {
+        return ResponseEntity.ok(medicineService.saveMedicine(medicine));
     }
 
     @GetMapping("/all")
-    public List<Medicine> getAllMedicines() {
-        return medicineService.getAllMedicines();
+    public ResponseEntity<List<Medicine>> getAll() {
+        return ResponseEntity.ok(medicineService.getAllMedicines());
     }
 
-    @GetMapping("/{id}")
-    public Medicine getMedicine(@PathVariable Long id) {
-        return medicineService.getMedicineById(id);
+    @GetMapping("/active")
+    public ResponseEntity<List<Medicine>> getActive() {
+        return ResponseEntity.ok(medicineService.getActiveMedicines());
     }
 
-    @PutMapping("/update/{id}")
-    public Medicine updateMedicine(@PathVariable Long id, @RequestBody Medicine medicine) {
-        return medicineService.updateMedicine(id, medicine);
+    @PutMapping("/update-stock/{id}")
+    public ResponseEntity<String> updateStock(@PathVariable Long id, @RequestParam int qty) {
+        medicineService.updateStock(id, qty);
+        return ResponseEntity.ok("Stock updated successfully");
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteMedicine(@PathVariable Long id) {
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<String> remove(@PathVariable Long id) {
         medicineService.deleteMedicine(id);
-        return "Medicine deleted successfully";
-    }
-
-    @GetMapping("/expired")
-    public List<Medicine> expiredMedicines() {
-        return medicineService.getExpiredMedicines();
-    }
-
-    @GetMapping("/expiring-soon")
-    public List<Medicine> expiringSoon() {
-        return medicineService.getExpiringSoonMedicines();
+        return ResponseEntity.ok("Medicine deactivated");
     }
 }
